@@ -1,5 +1,4 @@
 import time
-
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
@@ -17,26 +16,20 @@ def step_impl(context):
     driver.get(URL)
     driver.maximize_window()
     WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//*[@id='mat-input-2']"))).is_displayed()
-    # driver.find_element(By.XPATH, "//*[@id='mat-input-2']").is_displayed()
-    # time.sleep(2)
+
     print("page")
 
 
-@when(u'enters first name, last name, Phone number, Password, Confirm Password & Business type')
+@when(u'enters first name, last name, Password, Confirm Password')
 def step_impl(context):
-    # time.sleep(2)
     # first name
     driver.find_element(By.ID, "mat-input-0").send_keys("Rachel")
     # Last name
     driver.find_element(By.ID, "mat-input-1").send_keys("Green")
-    # Phone Number
-    driver.find_element(By.ID, "mat-input-3").send_keys("8999488540")
     # Password
     driver.find_element(By.ID, "mat-input-4").send_keys("Rachel@1")
     # Confirm Password
     driver.find_element(By.ID, "mat-input-5").send_keys("Rachel@1")
-    # Business name
-    driver.find_element(By.ID, "mat-input-6").send_keys("qa1")
     # Business type
     driver.find_element(By.ID, "mat-input-7").send_keys("Software")
 
@@ -44,28 +37,83 @@ def step_impl(context):
 @when(u'enters Email ID that is already registered "{EmailID}"')
 def step_impl(context, EmailID):
     print("email")
-    # Sendind Existing mail to the mail field
+    # Sending Existing mail to the mail field
     driver.find_element(By.ID, "mat-input-2").send_keys(EmailID)
-    # time.sleep(5)
-    print("clicked1")
-    # time.sleep(8)
-    # CheckBox
-    check = driver.find_element(By.XPATH, "//input[@type='checkbox']")
-    check.click()
-    time.sleep(5)
-    print("clicked")
+    # Business name
+    driver.find_element(By.ID, "mat-input-6").send_keys("qa1")
+    # Phone Number
+    driver.find_element(By.ID, "mat-input-3").send_keys("8999488540")
+    # Scrolling to the Bottom of the page
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    time.sleep(2)
+    driver.find_element(By.ID, "exampleCheck1").click()
 
 
 @when(u'click on Create Account CTA')
 def step_impl(context):
     print("signup button")
     WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, "//*[text()=' Create Account ']")))
-    print("not clickable")
     driver.find_element(By.XPATH, "//*[text()=' Create Account ']").click()
-    time.sleep(5)
 
 
-@then(u'Error message should be displayed "Email Address already registered"')
-def step_impl(context):
+@then(u'Error message should be displayed for Email ID"{Email_Error_Text}"')
+def step_impl(context,Email_Error_Text):
     print("already exist text")
-    # driver.find_element(By.)
+
+    Current_error_text = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "toast-container"))).text
+
+    print(Current_error_text)
+    time.sleep(3)
+    assert Email_Error_Text == Current_error_text
+# --------------------------------------------------------------------------------------------------
+
+@when(u'enters Business Name that is already registered "{BusinessName}"')
+def step_impl(context, BusinessName):
+    # Sending Business Name
+    driver.find_element(By.ID, "mat-input-6").send_keys(BusinessName)
+    # Email ID
+    driver.find_element(By.ID, "mat-input-2").send_keys("rossgeller@gmail.com")
+    # Phone Number
+    driver.find_element(By.ID, "mat-input-3").send_keys("8999488540")
+    # Scrolling to the Bottom of the page
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    time.sleep(3)
+    driver.find_element(By.ID, "exampleCheck1").click()
+
+
+@then(u'Error message should be displayed for Business Name"{Business_Name_Error_Text}"')
+def step_impl(context,Business_Name_Error_Text):
+    print("already exist text")
+
+    Current_error_text = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "toast-container"))).text
+
+    print(Current_error_text)
+    time.sleep(3)
+    assert Business_Name_Error_Text == Current_error_text
+
+    # ----------------------------------------------------
+
+
+@when(u'enters Phone Number that is already registered"{PhoneNumber}"')
+def step_impl(context, PhoneNumber):
+    # Sending Business Name
+    driver.find_element(By.ID, "mat-input-6").send_keys("tester10")
+    # Email ID
+    driver.find_element(By.ID, "mat-input-2").send_keys("monica.geller@gmail.com")
+    # Phone Number
+    driver.find_element(By.ID, "mat-input-3").send_keys(PhoneNumber)
+    # Scrolling to the Bottom of the page
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    time.sleep(3)
+    driver.find_element(By.ID, "exampleCheck1").click()
+
+
+@then(u'Error message should be displayed for Phone Number"{Phone_Number_Error_Text}"')
+def step_impl(context,Phone_Number_Error_Text):
+    print("already exist text")
+
+    Current_error_text = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "toast-container"))).text
+
+    print(Current_error_text)
+    time.sleep(3)
+    assert Phone_Number_Error_Text == Current_error_text
