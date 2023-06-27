@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from behave import *
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support.ui import Select
 
 driver = webdriver.Chrome(service=Service(r"C:\Users\ameya\Downloads\chromedriver_win32\chromedriver.exe"))
 
@@ -15,7 +16,7 @@ URL = "https://dev.worke.io/signup"
 def step_impl(context):
     driver.get(URL)
     driver.maximize_window()
-    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH, "//*[@id='mat-input-2']"))).is_displayed()
+    WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "mat-input-2"))).is_displayed()
 
     print("page")
 
@@ -30,8 +31,13 @@ def step_impl(context):
     driver.find_element(By.ID, "mat-input-4").send_keys("Rachel@1")
     # Confirm Password
     driver.find_element(By.ID, "mat-input-5").send_keys("Rachel@1")
-    # Business type
-    driver.find_element(By.ID, "mat-input-7").send_keys("Software")
+    # Scrolling down
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    time.sleep(2)
+    # Clicking on DropDown
+    driver.find_element(By.ID, "mat-select-value-3").click()
+    # Selecting Business Name
+    driver.find_element(By.ID, "mat-option-223").click()
 
 
 @when(u'enters Email ID that is already registered "{EmailID}"')
@@ -43,9 +49,6 @@ def step_impl(context, EmailID):
     driver.find_element(By.ID, "mat-input-6").send_keys("qa1")
     # Phone Number
     driver.find_element(By.ID, "mat-input-3").send_keys("8999488540")
-    # Scrolling to the Bottom of the page
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    time.sleep(2)
     driver.find_element(By.ID, "exampleCheck1").click()
 
 
@@ -97,9 +100,9 @@ def step_impl(context,Business_Name_Error_Text):
 @when(u'enters Phone Number that is already registered"{PhoneNumber}"')
 def step_impl(context, PhoneNumber):
     # Sending Business Name
-    driver.find_element(By.ID, "mat-input-6").send_keys("tester10")
+    driver.find_element(By.ID, "mat-input-6").send_keys("testing9")
     # Email ID
-    driver.find_element(By.ID, "mat-input-2").send_keys("monica.geller@gmail.com")
+    driver.find_element(By.ID, "mat-input-2").send_keys("joey.bing@gmail.com")
     # Phone Number
     driver.find_element(By.ID, "mat-input-3").send_keys(PhoneNumber)
     # Scrolling to the Bottom of the page
